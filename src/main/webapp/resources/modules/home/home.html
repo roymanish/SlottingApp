@@ -1,0 +1,95 @@
+<div>
+    <div style="margin-bottom: 15px">
+        <h3 class="modal-title text-center">Book Slots</h3>
+    </div>
+    <div ng-show="error" class="alert alert-danger">{{error}}</div>
+    <form name="form" ng-submit="bookSlot()" role="form">
+        <div class="form-group">
+            <label for="orderName">Enter Order Name</label>
+            <i class="fa fa-key"></i>
+            <input type="text" name="orderName" id="orderName" class="form-control" ng-model="orderName" placeholder="Order Name" required />
+            <span ng-show="form.orderName.$dirty && form.orderName.$error.required" class="help-block">Order name is required</span>
+        </div>
+        <div class="form-group">
+            <label for="itemCount">Enter Number Of Items</label>
+            <i class="fa fa-key"></i>
+            <input type="number" name="itemCount" id="itemCount" class="form-control" ng-model="itemCount" placeholder="Ex 100" required />
+            <span ng-show="form.itemCount.$dirty && form.itemCount.$error.required" class="help-block">Items is required</span>
+        </div>
+        <div class="form-group">
+            <label for="slotDate">Date</label>
+            <i class="fa fa-lock"></i>
+            <input type="date" name="slotDate" id="slotDate" class="form-control" ng-model="slotDate" required />
+            <span ng-show="form.slotDate.$dirty && form.slotDate.$error.required" class="help-block">Slot Date is required</span>
+        </div>
+        <div class="form-actions">
+            <button type="button" ng-disabled="form.$invalid || dataLoading" class="btn btn-primary"  data-toggle="modal" data-target="#slotsModal" ng-click="loadSlots()">Choose Slot</button>
+            <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#orderModal" ng-click="getAllOrderNames()">Order detail</button>
+        </div>
+        <!-- Slots Modal -->
+        <div class="modal fade" id="slotsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" style="width:205px" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-center" id="myModalLabel">Book Slots Here</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div ng-if="slots" class="time-slot" ng-repeat="slot in slots">       
+                            <input type="checkbox" id="{{slot.id}}" ng-disabled="slot.isBooked" ng-checked="slot.isBooked" />
+                            <label for="{{slot.id}}" ng-model="slotTime" ng-click="calRemainingItem(slot)">{{slot.slotTime}}</label>
+                        </div>
+                        <div style="margin-bottom: 5px">
+                            <h3 class="modal-title text-center">{{itemRemaining}} items are remaining.</h3>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" ng-if="enableBookBtn">Book Slot</button>
+                        <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" style="width:500px" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-center" id="myModalLabel">Order Details</h4>
+                    </div>
+                    <div class="modal-body">
+                        <label>Select Order Name</label>
+                        <select class="dropdown" ng-change="getAllSlotsForOrderName()" ng-model="ordrNm">
+                            <option ng-repeat="order in orders" value="{{order}}">
+                                {{order}}
+                            </option>
+                        </select>
+                        <table class="table" ng-if="slotsForOrder">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Slot Time</th>
+                                    <th>Item Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="enableHover" ng-repeat="slot in slotsForOrder">
+                                    <td>{{slot.slotDate}}</td>
+                                    <td>{{slot.slotTime}}</td>
+                                    <td>{{slot.itemCount}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" ng-if="enableBookBtn">Book Slot</button>
+                        <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
