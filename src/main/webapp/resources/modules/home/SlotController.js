@@ -15,10 +15,10 @@ angular.module('home')
                             SlotService.bookSlot(slots, function(response) {
                                 if (response) {
                                     $scope.dataLoading = true;
-                                    $scope.error = 'Slots Booked Successfully!'
+                                    $scope.success = 'Slots Booked Successfully!'
                                     $scope.dataLoading = false;
                                 } else {
-                                    $scope.error = response.message;
+                                    $scope.error = 'Failed to book slots!';
                                     $scope.dataLoading = false;
                                 }
                                 $scope.slotsSelected.length = 0;
@@ -52,10 +52,7 @@ angular.module('home')
                                     $scope.slots = response;
                                     //$scope.itemsRemaining = slotData.totalRemaining;
                                 } else {
-                                    var slotData = ConfigFactory.getSlots();
-                                    $scope.slots = slotData.slots;
-                                    $scope.itemsRemaining = slotData.totalRemaining;
-                                    $scope.error = response.message;
+                                    $scope.error = "Failed to load slots!";
                                     $scope.dataLoading = false;
                                 }
                             });
