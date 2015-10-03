@@ -12,7 +12,7 @@ This is UI driven slot booking application POC. On the home screen user has to m
 * The book slots button is not enable till the user is able to slot all items in his/her order.
 * Each slot has predefined number of items. Based on the number of vehicles available in that slot. This should be part of configuration of the application which is not in this application due to constraints of time.
 * Item count in a open slot has been externalized in a properties file on server side.
-* An item is defined booked. It it has reached it maximum item count limit. In this case 80.
+* An item is defined booked if it has reached its maximum item count limit. In this case 80.
 
 ---------------------------
     Technologies used
