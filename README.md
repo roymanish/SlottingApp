@@ -1,7 +1,7 @@
 # Slot Booking Application #
 
 ------------------------------------------------------------------
-       DEMO URL : [http://jbossews-maroy.rhcloud.com/SlottingApp/]
+       DEMO URL : [http://jbossews-maroy.rhcloud.com/SlottingApp/](http://jbossews-maroy.rhcloud.com/SlottingApp/)
 ------------------------------------------------------------------
 
 ---------------------------
